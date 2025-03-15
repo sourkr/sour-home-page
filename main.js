@@ -6,7 +6,7 @@ document.getElementById("apps").addEventListener('click', async () => {
   if (!/\w+\.\w+(\.\w+)?/.test(url)) return
   
   const img = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
-  const name = await fetchWebsiteTitle('https://www.google.com')
+  const name = await fetchWebsiteTitle('https://' + url)
   const uri = `https://${url}`
   
   addApp(img, name, uri)
@@ -19,6 +19,7 @@ async function fetchWebsiteTitle(domain) {
   try {
     const response = await fetch(url);
     const data = await response.json();
+    console.log(data)
     return data.hybridGraph.site_name || data.hybridGraph.title;
   } catch (error) {
     console.error(error);
@@ -61,3 +62,69 @@ if (localStorage.getItem('apps')) {
     addApp(app.icon, app.name, app.url)
   })
 }
+
+
+// document.onlong
+
+// long press
+let timer;
+
+function onlongclick(ev) {
+  ev.preventDefault()
+  document.body.classList.add('edit')
+}
+
+function startPress(event) {
+  timer = setTimeout(() => onlongclick(event), 1000)
+}
+
+function cancelPress() {
+  clearTimeout(timer);
+}
+
+// Mouse Events
+document.addEventListener("mousedown", startPress);
+document.addEventListener("mouseup", cancelPress);
+document.addEventListener("mouseleave", cancelPress);
+
+// Touch Events (for mobile)
+document.addEventListener("touchstart", startPress);
+document.addEventListener("touchend", cancelPress);
+document.addEventListener("touchmove", cancelPress);
+
+document.getElementById('wallpaper').addEventListener('click', () => {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*"; // Only allow image files
+  
+  input.onchange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      convertToBase64(file);
+    }
+  };
+  
+  input.click();
+})
+
+function convertToBase64(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const url = e.target.result;
+    document.body.style.backgroundImage = `url(${url})`
+    localStorage.setItem('wallpaper', url)
+  };
+  reader.readAsDataURL(file);
+}
+
+if (localStorage.getItem('wallpaper')) {
+  document.body.style.backgroundImage = `url(${localStorage.getItem('wallpaper')})`
+}
+
+document.body.addEventListener('click', ev => {
+  if (document.body.classList.contains('edit')) {
+    document.body.classList.remove('edit')
+    // ev.preventDefault()
+    // alert('ser')
+  }
+})
