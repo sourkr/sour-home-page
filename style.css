@@ -8,15 +8,18 @@ body {
   display: flex;
   flex-direction: column;
   transition: .2s;
+  user-select: none;
+  color: black;
 }
 
 .edit {
   backdrop-filter: blur(10px);
-    
+  
   #grid {
     background: hsl(0 0 100 / .2);
     margin: 25px;
     border-radius: 30px;
+    font-size: 0.9rem;
   }
   
   #dock {
@@ -47,6 +50,20 @@ body {
     span {
       font-size: 2.5rem;
     }
+  }
+}
+
+.popup {
+  /* position-anchor: --app-popup; */
+  
+  /* anchor-name: --app-popup; */
+  
+  img {
+    animation: hovered .3s linear infinite alternate;
+  }
+  
+  span {
+    display: none;
   }
 }
 
@@ -85,7 +102,7 @@ body {
   align-items: center;
   text-decoration: none;
   overflow: hidden;
-  color: black;
+  color: inherit;
   
   img {
     --padding: 20px;
@@ -110,4 +127,69 @@ body {
     border-radius: 15px;
     padding: 5px;
   }
+}
+
+@keyframes hovered {
+  0% {
+    translate: 0 0;
+  }
+  
+  100% {
+    translate: 0 5px;
+  }
+}
+
+#app-info {
+  --radius: 15px;
+  --width: 250px;
+  
+  display: none;
+  position-anchor: --app-popup;
+  position: absolute;
+  bottom: anchor(top);
+  left: max(anchor(center) - calc(var(--width) / 2), 10px);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  width: var(--width);
+  
+  #app-name {
+    background: hsl(0 0 100 / .2);
+    padding: 15px;
+    font-size: 1.4rem;
+    border-radius: var(--radius) var(--radius) 0 0;
+    text-align: center;
+  }
+  
+  #app-actions {
+    background: hsl(0 0 100 / .4);
+    padding: 10px;
+    border-radius: 0 0 var(--radius) var(--radius);
+
+    div {
+      text-align: center;
+      font-size: 0.75rem;
+      
+      span {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+#rect {
+  display: none;
+  position: absolute;
+  top: anchor(top);
+  translate: -50% -50%;
+  position-anchor: --app-popup;
+  /* left: 10px; */
+  left: anchor(center);
+  width: 7px;
+  height: 7px;
+  background: hsl(0 0 100 / .4);
+  /* background: red; */
+  backdrop-filter: blur(10px);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  rotate: 45deg;
+  border-bottom-right-radius: 3px; */
 }

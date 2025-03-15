@@ -1,3 +1,5 @@
+let appInfoPopup = null
+
 document.getElementById("apps").addEventListener('click', async () => {
   const url = prompt("Enter Website Domain Name")
   
@@ -41,6 +43,25 @@ function addApp(imgSrc, title, url) {
   app.append(img, name)
   
   document.getElementById('grid').append(app)
+  
+  app.addEventListener('contextmenu', ev => {
+    ev.preventDefault()
+    ev.stopPropagation()
+    app.classList.add('popup')
+    app.style.anchorName = '--app-popup'
+    document.getElementById('app-info').style.display = 'block'
+    document.getElementById('rect').style.display = 'block'
+    appInfoPopup = app
+    
+    document.getElementById('app-remove').onclick = () => {
+      // alert('delete')
+      let apps = JSON.parse(localStorage.getItem('apps'))
+      apps = apps.filter(app => app.url != url)
+      localStorage.setItem('apps', JSON.stringify(apps))
+      app.remove()
+      closePopup()
+    }
+  })
 }
 
 function saveApp(name, icon, url) {
@@ -49,6 +70,7 @@ function saveApp(name, icon, url) {
   }
   
   const apps = JSON.parse(localStorage.getItem('apps'))
+  const index = 
   
   apps.push({ name, icon, url })
   
@@ -70,12 +92,26 @@ if (localStorage.getItem('apps')) {
 let timer;
 
 function onlongclick(ev) {
-  ev.preventDefault()
-  document.body.classList.add('edit')
+  // ev.preventDefault()
+  // console.log(ev.target.dispatchEvent)
+  ev.target.dispatchEvent(new CustomEvent('longclick', { data: { touchStartEvent: ev } }))
 }
 
-function startPress(event) {
-  timer = setTimeout(() => onlongclick(event), 1000)
+function startPress(ev) {
+  if (appInfoPopup && !document.getElementById('app-info').contains(ev.target)) {
+    closePopup()
+    ev.stopPropagation()
+  }
+  
+  timer = setTimeout(() => onlongclick(ev), 700)
+}
+
+function closePopup() {
+  appInfoPopup.classList.remove('popup')
+  appInfoPopup.style.anchorName = 'none'
+  document.getElementById('app-info').style.display = 'none'
+  document.getElementById('rect').style.display = 'none'
+  appInfoPopup = null
 }
 
 function cancelPress() {
@@ -91,6 +127,12 @@ document.addEventListener("mouseleave", cancelPress);
 document.addEventListener("touchstart", startPress);
 document.addEventListener("touchend", cancelPress);
 document.addEventListener("touchmove", cancelPress);
+
+document.getElementById('grid').addEventListener('contextmenu', ev => {
+  document.body.classList.add('edit')
+})
+
+// document
 
 document.getElementById('wallpaper').addEventListener('click', () => {
   const input = document.createElement("input");
