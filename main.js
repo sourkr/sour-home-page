@@ -160,9 +160,7 @@ function createApp(appInfo, mode = 'top') {
         
         document.getElementById("app-sc").innerHTML = ''
         
-        console.log(appInfo)
-        
-        appInfo.actions?.forEach(action => {
+        try { appInfo.actions?.forEach(action => {
             const li = document.createElement('li')
             const a = document.createElement('a')
             const icon = document.createElement('span')
@@ -170,15 +168,15 @@ function createApp(appInfo, mode = 'top') {
             
             a.href = action.url
             
-            icon.innerText = actions.icon
+            icon.innerText = action.icon
             icon.classList.add("material-symbols-rounded")
             
-            title.innerText = actions.title
+            title.innerText = action.title
             
             a.append(icon, title)
             li.append(a)
             document.getElementById("app-sc").append(li)
-        })
+        }) } catch {}
         
         document.getElementById('app-remove').onclick = () => {
             // console.log(app.parentElement, dock, app.parentElement == dock)

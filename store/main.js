@@ -17,7 +17,7 @@ namesCom.split('\n').forEach(name => {
         title: words[1],
         url: `https://${domain}`,
         small: words[3] == 'S',
-        actions: actionsList[domain]
+        actions: actionsList[domain] || []
     })
 })
 
