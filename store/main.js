@@ -1,10 +1,28 @@
 import LocalStorage from '../localstorage.js';
 
 const localStore = new LocalStorage('sour-home')
-const apps = await (await fetch('./apps.json')).json()
+const namesCom = await (await fetch('./namesCom.txt')).text()
 const list = document.getElementById('apps')
 
-apps.forEach(app => {
+namesCom.split('\n').forEach(name => {
+    const words = name.split(' ')
+    
+    if (!words[0]) {
+        const domain = words[1].toLowerCase() + "." + words[2].toLowerCase()
+        createItem({
+            icon: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+            title: words[1],
+            url: `https://${domain}`,
+            small: words[3] == 'S'
+        })
+    }
+})
+
+const apps = await (await fetch('./apps.json')).json()
+
+apps.forEach(createItem)
+
+function createItem(app) {
     const root = document.createElement('li')
     const icon = document.createElement('div')
     const img = document.createElement('img')
@@ -36,4 +54,4 @@ apps.forEach(app => {
     }
     
     list.append(root)
-})
+}
