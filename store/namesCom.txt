@@ -14,8 +14,15 @@
  X com
  Reddit com S
  Quora com S
- Stackoverflow com
+ Stackoverflow com S
  Duolingo com
  Chess com S
- Lechess org S
+ Lichess org S
  Crunchyroll com S
+ Flipkart com
+ Amazon com S
+ Ollama com S
+ Discord com S
+ Pintrest com S
+ Spotify com S
+ Telegram org

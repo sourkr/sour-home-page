@@ -7,15 +7,14 @@ const list = document.getElementById('apps')
 namesCom.split('\n').forEach(name => {
     const words = name.split(' ')
     
-    if (!words[0]) {
-        const domain = words[1].toLowerCase() + "." + words[2].toLowerCase()
-        createItem({
-            icon: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
-            title: words[1],
-            url: `https://${domain}`,
-            small: words[3] == 'S'
-        })
-    }
+    const domain = (words[0] ? words[0].toLowerCase() + '.' : '') + words[1].toLowerCase() + (words[2] ? "." + words[2].toLowerCase() : '')
+    console.log(domain)
+    createItem({
+        icon: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+        title: words[1],
+        url: `https://${domain}`,
+        small: words[3] == 'S'
+    })
 })
 
 const apps = await (await fetch('./apps.json')).json()
