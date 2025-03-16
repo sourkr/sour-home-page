@@ -150,7 +150,7 @@ document.body.addEventListener('click', ev => {
 //     return item;
 // }
 
-function createApp(appInfo) {
+function createApp(appInfo, mode = 'top') {
     const app = document.createElement('a')
     const img = document.createElement('img')
     const name = document.createElement('span')
@@ -189,9 +189,28 @@ function createApp(appInfo) {
         
         document.getElementById('app-name').innerText = appInfo.title
         document.getElementById('app-info').style.display = 'block'
+        // document.g/etElementById('app-info').classList.add('top')
         document.getElementById('rect').style.display = 'block'
         appInfoPopup = app
         movable = true
+        
+        document.getElementById("app-sc").innerHTML = ''
+        
+        if (appInfo.actions) {
+            for(let key in appInfo.actions) {
+                const li = document.createElement('li')
+                const icon = document.createElement('span')
+                const title = document.createElement('span')
+                
+                icon.innerText = key
+                icon.classList.add("material-symbols-rounded")
+                
+                title.innerText = appInfo.actions[key]
+                
+                li.append(icon, title)
+                document.getElementById("app-sc").append(li)
+            }
+        }
         
         document.getElementById('app-remove').onclick = () => {
             // console.log(app.parentElement, dock, app.parentElement == dock)

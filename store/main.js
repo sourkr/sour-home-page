@@ -3,17 +3,21 @@ import LocalStorage from '../localstorage.js';
 const localStore = new LocalStorage('sour-home')
 const namesCom = await (await fetch('./namesCom.txt')).text()
 const list = document.getElementById('apps')
+const actionsList = await (await fetch('./actions.json')).json()
 
 namesCom.split('\n').forEach(name => {
     const words = name.split(' ')
     
     const domain = (words[0] ? words[0].toLowerCase() + '.' : '') + words[1].toLowerCase() + (words[2] ? "." + words[2].toLowerCase() : '')
-    console.log(domain)
+    
+    // const actions = 
+    
     createItem({
         icon: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
         title: words[1],
         url: `https://${domain}`,
-        small: words[3] == 'S'
+        small: words[3] == 'S',
+        actions: actionsList[domain]
     })
 })
 
