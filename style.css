@@ -10,6 +10,7 @@ body {
     transition: .2s;
     user-select: none;
     color: black;
+    overflow: hidden;
 }
 
 .edit {
@@ -136,17 +137,15 @@ body {
     }
     
     img {
-        /* --padding: 20px; */
         margin-block: 15px 10px;
-        /* width: calc(100% - 2 * var(--padding)); */
-        /* margin: var(--padding) var(--padding) 5px var(--padding); */
-        /* background: hsl(0 0 100 / .1); */
         border-radius: 20px;
-        /* backdrop-filter: blur(2px); */
-        background: white;
-        padding: 10px;
         box-sizing: border-box;
         translate: .2s;
+        
+        &.small {
+            padding: 10px;
+            background: white;
+        }
     }
 }
 

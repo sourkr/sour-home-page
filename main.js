@@ -25,14 +25,44 @@ document.getElementById("apps").addEventListener('click', async () => {
     
     if (!/\w+\.\w+(\.\w+)?/.test(url)) return
     
+    let icon = null
+    
     const info = await fetchWebsiteInfo('https://' + url)
-    const title = info.hybridGraph.title
-    const icon = info.hybridGraph.favicon || `http://www.google.com/s2/favicons?domain=${url}&sz=128`
+    const title = clearName(info.hybridGraph.title || info.hybridGraph.title || 'Unnamed')
+    // const icon = info.hybridGraph.image || info.hybridGraph.favicon || `http://www.google.com/s2/favicons?domain=${url}&sz=128`
     const uri = info.hybridGraph.url = `https://${url}`
+    
+    try {
+        if (/\w+\.\w+(\.\w+)?$/.test(url)) {
+            icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
+        } else {
+            icon = info.hybridGraph.image || info.hybridGraph.favicon
+            
+            if (icon) {
+                await loadImage(icon) 
+            } else {
+                icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
+            }
+        }
+    } catch {
+        icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
+    }
+    
+    // icon = 'https://cors-anywhere.herokuapp.com/google.com/favicon.ico'
     
     grid.append(createApp(icon, title, uri))
     localStore.push("apps", { icon, title, url: uri})
 })
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image(1, 1)
+        img.src = src
+        
+        img.onload = () => resolve(img)
+        img.onerror = () => reject()
+    })
+}
 
 async function fetchWebsiteInfo(domain) {
     const url = `https://opengraph.io/api/1.1/site/${encodeURIComponent(domain)}?app_id=0c253682-e5d9-4402-b0e4-22933b6a92fe`;
@@ -46,19 +76,6 @@ async function fetchWebsiteInfo(domain) {
         console.error(error);
         return 'Untitled'
     }
-}
-
-function saveApp(name, icon, url) {
-    if (!localStorage.getItem('apps')) {
-        localStorage.setItem('apps', '[]')
-    }
-    
-    const apps = JSON.parse(localStorage.getItem('apps'))
-    // const index = 
-    
-    apps.push({ name, icon, url })
-    
-    localStorage.setItem('apps', JSON.stringify(apps))
 }
 
 function startPress(ev) {
@@ -142,8 +159,16 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
     app.draggable = true
     
     img.src = iconSrc
+    // img.src = 'https://corsproxy.io/' + encodeURIComponent('https://logo.clearbit.com/google.com')
+    console.log(img.src)
     img.width = 60
     img.height = 60
+    
+    isTransparent(iconSrc)
+        .then(res => {
+            console.log(res)
+            if (res) img.classList.add('small')
+        })
     
     name.innerText = titleStr
     
@@ -225,6 +250,62 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
     })
     
     return app
+}
+
+function loadImageCross(iconSrc) {
+    return new Promise((resolve, reject) => {
+        const options = { headers: {
+            'x-cors-api-key': 'temp_feb2edc04842027197f40b2bf0452b5d'
+        } };
+        
+        fetch('https://proxy.cors.sh/' + iconSrc, options)
+            .then(response => response.blob())
+            .then(response => {
+                var a = new FileReader();
+                a.onload = e => {
+                    const img = new Image(10, 10)
+                    img.onload = () => resolve(img)
+                    img.onerror = () => reject("Failed to Load: " + iconSrc)
+                    // console.log(e.target.result)
+                    img.src = e.target.result
+                }
+                a.onerror = (e) => reject("Failed to Read: " + iconSrc + e)
+                a.readAsDataURL(response);
+            })
+            // .catch(() => reject("Failed to Fetch: " + iconSrc));
+    })
+}
+
+
+
+async function isTransparent(imgSrc) {
+    const img = await loadImageCross(imgSrc)
+    // const can = document.createElement('canvas')
+    const can = new OffscreenCanvas(10, 10);
+    const ctx = can.getContext('2d')
+        
+    // grid.append(img)
+    
+    ctx.drawImage(img, 0, 0, 10, 10)
+    // grid.append(can)
+    const imgd = ctx.getImageData(0, 0, 10, 10)
+    let count = 0
+            
+    for(let i = 0; i < imgd.data.length; i += 4) {
+        if (imgd.data[i + 3] < 255) count++
+    }
+    
+    console.log(count)
+    
+    return count > 10
+}
+
+function clearName(name) {
+    if (/.*\|.*/.test(name)) {
+        return /.*\|(.*)/.exec(name)[1].trim()
+    }
+    
+    return name.trim()
 }
 
 main()
