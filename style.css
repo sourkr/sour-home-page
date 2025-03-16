@@ -116,10 +116,22 @@ body {
     }
 }
 
+.hidden {
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    position: absolute;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
 .app {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
     align-items: center;
     text-decoration: none;
     overflow: hidden;
@@ -138,12 +150,13 @@ body {
     
     img {
         margin-block: 15px 10px;
-        border-radius: 20px;
+        /* border-radius: 20px; */
         box-sizing: border-box;
         translate: .2s;
+        clip-path: url(#squircle);
         
         &.small {
-            padding: 10px;
+            padding: 7.5px;
             background: white;
         }
     }
@@ -155,6 +168,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: visible;
     
     &.drag {
         background: red;
@@ -166,7 +180,7 @@ body {
         flex: 1;
         justify-content: center;
         
-        span {
+        a {
             display: flex;
             font-size: 3rem;
             width: 60px;
@@ -176,11 +190,14 @@ body {
             background: hsl(0 0 100);
             border-radius: 15px;
             color: hsl(0 0 40);
+            clip-path: url(#squircle);
+            text-decoration: none;
         }
     }
     
     .app {
         justify-content: center;
+        /* clip-path: url(#squircle); */
         flex: 1;
         
         img {
@@ -258,12 +275,18 @@ body {
     border-bottom-right-radius: 3px;
 }
 
-.fake-dock-item {
+#fake-app {
     position: relative;
     height: 100%;
     flex: 1;
+    overflow: visible;
     
-    &:after {
+    svg {
+      width: 60px;
+      height: 60px;
+    }
+    
+    /* &:after {
         content: '';
         position: absolute;
         width: 60px;
@@ -272,5 +295,9 @@ body {
         translate: -50% 0;
         border: 2px solid white;
         border-radius: 20px;
-    }
+    } */
+}
+
+.hide {
+    display: 
 }

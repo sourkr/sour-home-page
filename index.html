@@ -21,7 +21,7 @@
     
     <div id="dock">
         <div>
-            <span id="apps" class="material-symbols-rounded">apps</span>
+            <a id="apps" class="material-symbols-rounded" href="store">apps</a>
         </div>
     </div>
     
@@ -45,6 +45,40 @@
     <div id="rect">
         
     </div>
+    
+    <div id="fake-app">
+        <svg id="fake-app" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke="hsl(0 0 100 / .5)" stroke-width="4px" fill="transparent">
+            <path d="
+            M 0 80
+            C 0 20, 20 0, 80 0
+            S 160 20, 160 80, 140 160
+            80 160, 0 140, 0 80
+            " transform="
+            rotate(
+            0,
+            80,
+            80
+            )
+            translate(
+            0,
+            0
+            )
+            "></path>
+        </svg>
+    </div>
+    
+    <svg class="hidden" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <clipPath id="squircle" clipPathUnits="objectBoundingBox">
+                <path d="M 0,0.5
+                    C 0,0.115  0.115,0  0.5,0
+                      0.885,0  1,0.115  1,0.5
+                      1,0.885  0.885,1  0.5,1
+                      0.115,1  0,0.885  0,0.5"></path>
+                
+            </clipPath>
+        </defs>
+    </svg>
     
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>

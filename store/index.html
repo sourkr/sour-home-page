@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sour Store</title>
+</head>
+
+<body>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            /* background: hsl(200 100 95); */
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        li {
+            padding: 10px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid hsl(0 0 97);
+            
+            .icon {
+                filter: drop-shadow(0 0 2px hsl(0 0 80));
+                
+                img {
+                    width: 60px;
+                    height: 60px;
+                    clip-path: url(#squircle);
+                    
+                    &.small {
+                        box-sizing: border-box;
+                        padding: 7.5px;
+                        background: white;
+                    }
+                }
+            }
+            
+            span {
+                flex: 1;
+            }
+            
+            button {
+                background: hsl(200 100 50);
+                border: none;
+                font-size: 1.2rem;
+                color: white;
+                padding: 5px 15px;
+                border-radius: calc(1rem / 2 + 15px);
+            }
+        }
+    </style>
+    
+    <ul id="apps"></ul>
+    
+    <svg class="hidden" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <clipPath id="squircle" clipPathUnits="objectBoundingBox">
+                <path d="M 0,0.5
+                    C 0,0.115  0.115,0  0.5,0
+                      0.885,0  1,0.115  1,0.5
+                      1,0.885  0.885,1  0.5,1
+                      0.115,1  0,0.885  0,0.5"></path>
+                
+            </clipPath>
+        </defs>
+    </svg>
+    
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+        eruda.init();
+    </script>
+    <script src="main.js" type="module"></script>
+</body>
+
+</html>

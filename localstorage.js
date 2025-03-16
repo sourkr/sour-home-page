@@ -65,6 +65,17 @@ export default class LocalStorage {
         this.save()
     }
     
+    find(key, predicate) {
+        const keys = key.split('.')
+        const data = this._get(keys)
+        
+        if (!data[keys.at(-1)]) {
+            data[keys.at(-1)] = []
+        }
+        
+        return data[keys.at(-1)].find(predicate)
+    }
+    
     _get(keys) {
         let data = this.data
         

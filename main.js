@@ -4,21 +4,24 @@ const localStore = new LocalStorage('sour-home')
 
 const grid = document.getElementById('grid')
 const dock = document.getElementById('dock')
-
+const fakeApp = document.getElementById('fake-app')
 
 let appInfoPopup = null
 
+// initialaly hidden
+fakeApp.remove()
+
 function main() {
     localStore.get('dock', []).forEach(app => {
-        dock.prepend(createApp(app.icon, app.title, app.url))
+        dock.prepend(createApp(app))
     })
     
     localStore.get('apps', []).forEach(app => {
-        grid.append(createApp(app.icon, app.title, app.url))
+        grid.append(createApp(app))
     })
 }
 
-document.getElementById("apps").addEventListener('click', async () => {
+/* document.getElementById("apps").addEventListener('click', async () => {
     const url = prompt("Enter Website Domain Name")
     
     if (url == null || url == '') return
@@ -52,7 +55,7 @@ document.getElementById("apps").addEventListener('click', async () => {
     
     grid.append(createApp(icon, title, uri))
     localStore.push("apps", { icon, title, url: uri})
-})
+}) */
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -141,36 +144,36 @@ document.body.addEventListener('click', ev => {
     }
 })
 
-function createFakeDockItem() {
-    const item = document.createElement('div')
-    item.classList.add('fake-dock-item')
-    return item;
-}
+// function createFakeDockItem() {
+//     const item = document.createElement('div')
+//     item.classList.add('fake-dock-item')
+//     return item;
+// }
 
-function createApp(iconSrc, titleStr, urlStr, isDock) {
+function createApp(appInfo) {
     const app = document.createElement('a')
     const img = document.createElement('img')
     const name = document.createElement('span')
     
-    const fakeDockItem = createFakeDockItem()
-    
     app.classList.add('app')
-    app.href = urlStr
+    app.href = appInfo.url
     app.draggable = true
     
-    img.src = iconSrc
+    img.src = appInfo.icon
     // img.src = 'https://corsproxy.io/' + encodeURIComponent('https://logo.clearbit.com/google.com')
-    console.log(img.src)
+    // console.log(img.src)
     img.width = 60
     img.height = 60
     
-    isTransparent(iconSrc)
-        .then(res => {
-            console.log(res)
-            if (res) img.classList.add('small')
-        })
+    if (appInfo.small) img.classList.add('small')
     
-    name.innerText = titleStr
+    // isTransparent(appInfo.)
+    //     .then(res => {
+    //         console.log(res)
+    //         if (res) img.classList.add('small')
+    //     })
+    
+    name.innerText = appInfo.title
     
     app.append(img, name)
     
@@ -184,7 +187,7 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
         app.classList.add('popup')
         app.style.anchorName = '--app-popup'
         
-        document.getElementById('app-name').innerText = titleStr
+        document.getElementById('app-name').innerText = appInfo.title
         document.getElementById('app-info').style.display = 'block'
         document.getElementById('rect').style.display = 'block'
         appInfoPopup = app
@@ -193,9 +196,9 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
         document.getElementById('app-remove').onclick = () => {
             // console.log(app.parentElement, dock, app.parentElement == dock)
             if (app.parentElement == dock) {
-                localStore.filter("dock", app => app.url != urlStr)
+                localStore.filter("dock", app => app.url != appInfo.url)
             } else {
-                localStore.filter("apps", app => app.url != urlStr)
+                localStore.filter("apps", app => app.url != appInfo.url)
             }
             
             app.remove()
@@ -222,9 +225,10 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
         const box = document.getElementById('dock').getBoundingClientRect()
         
         if (y >= box.top) {
-            document.getElementById('dock').prepend(fakeDockItem)
+            document.getElementById('dock').prepend(fakeApp)
             // document.getElementById('dock').classList.add('drag')
         } else {
+            fakeApp.remove()
             // document.getElementById('dock').classList.remove('drag')
         }
     })
@@ -235,17 +239,19 @@ function createApp(iconSrc, titleStr, urlStr, isDock) {
         app.classList.remove('drag')
         document.getElementById('grid').classList.remove('drag')
         
+        fakeApp.remove()
+            
         if (y >= box.top) {
             app.classList.remove('drag')
             
-            fakeDockItem.remove()
             app.remove()
             document.getElementById('dock').prepend(app)
             
             app.style.left = 0
             app.style.top = 0
             
-            localStore.push('dock', { icon: imgSrc, title, url })
+            localStore.filter('apps', app => app.url != appInfo.url)
+            localStore.push('dock', appInfo)
         }
     })
     
@@ -303,6 +309,10 @@ async function isTransparent(imgSrc) {
 function clearName(name) {
     if (/.*\|.*/.test(name)) {
         return /.*\|(.*)/.exec(name)[1].trim()
+    }
+    
+    if (/.*\•.*/.test(name)) {
+        return /(.*)\•.*/.exec(name)[1].trim()
     }
     
     return name.trim()
