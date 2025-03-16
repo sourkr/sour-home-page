@@ -1,23 +1,118 @@
 [
-    {
-        "title": "Google",
-        "icon": "https://www.google.com/s2/favicons?domain=google.com&sz=128",
-        "url": "https://google.com",
-        "small": true
-    },{
-        "title": "Youtube",
-        "icon": "https://www.google.com/s2/favicons?domain=youtube.com&sz=128",
-        "url": "https://youtube.com",
-        "small": true
-    }, {
-        "title": "Github",
-        "icon": "https://www.google.com/s2/favicons?domain=github.com&sz=128",
-        "url": "https://github.com",
-        "small": true
-    }, {
-        "title": "Spck Editor",
-        "icon": "https://www.google.com/s2/favicons?domain=spck.io&sz=128",
-        "url": "https://spck.io/workspace",
-        "small": false
-    }
+{
+    "title": "Google",
+    "icon": "https://www.google.com/s2/favicons?domain=google.com&sz=128",
+    "url": "https://google.com",
+    "small": true
+}, {
+    "title": "Youtube",
+    "icon": "https://www.google.com/s2/favicons?domain=youtube.com&sz=128",
+    "url": "https://youtube.com",
+    "small": true
+}, {
+    "title": "Github",
+    "icon": "https://www.google.com/s2/favicons?domain=github.com&sz=128",
+    "url": "https://github.com",
+    "small": true
+}, {
+    "title": "Spck Editor",
+    "icon": "https://www.google.com/s2/favicons?domain=spck.io&sz=128",
+    "url": "https://spck.io/workspace",
+    "small": false
+}, {
+    "title": "ChatGPT",
+    "icon": "https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128",
+    "url": "https://chatgpt.com",
+    "small": false
+}, {
+    "title": "Gemini",
+    "icon": "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128",
+    "url": "https://gemini.google.com",
+    "small": true
+}, {
+    "title": "Regex101",
+    "icon": "https://www.google.com/s2/favicons?domain=regex101.com&sz=128",
+    "url": "https://regex101.com",
+    "small": false
+}, {
+    "title": "Obsidian",
+    "icon": "https://www.google.com/s2/favicons?domain=obsidian.md&sz=128",
+    "url": "https://obsidian.md",
+    "small": false
+}, {
+    "title": "Ray.so",
+    "icon": "https://www.google.com/s2/favicons?domain=ray.so&sz=128",
+    "url": "https://ray.so",
+    "small": false
+}, {
+    "title": "Wikipedia",
+    "icon": "https://www.google.com/s2/favicons?domain=wikipedia.org&sz=128",
+    "url": "https://wikipedia.org",
+    "small": false
+}, {
+    "title": "Deepseek",
+    "icon": "https://www.google.com/s2/favicons?domain=deepseek.com&sz=128",
+    "url": "https://deepseek.com",
+    "small": true
+}, {
+    "title": "Grok",
+    "icon": "https://www.google.com/s2/favicons?domain=x.ai&sz=128",
+    "url": "https://x.ai",
+    "small": true
+}, {
+    "title": "Claude",
+    "icon": "https://www.google.com/s2/favicons?domain=claude.ai&sz=128",
+    "url": "https://claude.ai",
+    "small": true
+}, {
+    "title": "Instagram",
+    "icon": "https://www.google.com/s2/favicons?domain=instagram.com&sz=128",
+    "url": "https://instagram.com",
+    "small": false
+}, {
+    "title": "Whatsapp",
+    "icon": "https://www.google.com/s2/favicons?domain=whatsapp.com&sz=128",
+    "url": "https://whatsapp.com",
+    "small": true
+}, {
+    "title": "Facebook",
+    "icon": "https://www.google.com/s2/favicons?domain=facebook.com&sz=128",
+    "url": "https://facebook.com",
+    "small": true
+}, {
+    "title": "X",
+    "icon": "https://www.google.com/s2/favicons?domain=x.com&sz=128",
+    "url": "https://x.com",
+    "small": false
+}, {
+    "title": "Reddit",
+    "icon": "https://www.google.com/s2/favicons?domain=reddit.com&sz=128",
+    "url": "https://reddit.com",
+    "small": true
+}, {
+    "title": "Quora",
+    "icon": "https://www.google.com/s2/favicons?domain=quora.com&sz=128",
+    "url": "https://quora.com",
+    "small": true
+}, {
+    "title": "Stackoverflow",
+    "icon": "https://www.google.com/s2/favicons?domain=stackoverflow.com&sz=128",
+    "url": "https://stackoverflow.com",
+    "small": true
+}, {
+    "title": "Duolingo",
+    "icon": "https://www.google.com/s2/favicons?domain=duolingo.com&sz=128",
+    "url": "https://duolingo.com",
+    "small": false
+}, {
+    "title": "Chess.com",
+    "icon": "https://www.google.com/s2/favicons?domain=chess.com&sz=128",
+    "url": "https://chess.com",
+    "small": true
+}, {
+    "title": "Crunchyroll",
+    "icon": "https://www.google.com/s2/favicons?domain=crunchyroll.com&sz=128",
+    "url": "https://crunchyroll.com",
+    "small": true
+}
 ]
