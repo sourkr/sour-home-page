@@ -301,3 +301,26 @@ body {
 .hide {
     display: 
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background: hsl(0 0 100 / .5);
+    
+    a {
+        display: flex;
+        align-items: center;
+        padding: 5px 15px;
+        gap: 10px;
+        text-decoration: none;
+        color: inherit;
+        
+        .material-symbols-rounded {
+            background: white;
+            padding: 5px;
+            clip-path: url(#squircle);
+            font-size: 1rem;
+        }
+    }
+}

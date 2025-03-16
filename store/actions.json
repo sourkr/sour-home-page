@@ -1,5 +1,9 @@
 {
-    "youtube.com": {
-        "subscriptions": "Subscriptions"
-    }
+    "youtube.com": [
+        {
+            "icon": "subscriptions",
+            "title": "Subscriptions",
+            "url": "https://youtube.com/feed/subscriptions"
+        }
+    ]
 }

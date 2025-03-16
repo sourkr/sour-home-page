@@ -21,42 +21,6 @@ function main() {
     })
 }
 
-/* document.getElementById("apps").addEventListener('click', async () => {
-    const url = prompt("Enter Website Domain Name")
-    
-    if (url == null || url == '') return
-    
-    if (!/\w+\.\w+(\.\w+)?/.test(url)) return
-    
-    let icon = null
-    
-    const info = await fetchWebsiteInfo('https://' + url)
-    const title = clearName(info.hybridGraph.title || info.hybridGraph.title || 'Unnamed')
-    // const icon = info.hybridGraph.image || info.hybridGraph.favicon || `http://www.google.com/s2/favicons?domain=${url}&sz=128`
-    const uri = info.hybridGraph.url = `https://${url}`
-    
-    try {
-        if (/\w+\.\w+(\.\w+)?$/.test(url)) {
-            icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
-        } else {
-            icon = info.hybridGraph.image || info.hybridGraph.favicon
-            
-            if (icon) {
-                await loadImage(icon) 
-            } else {
-                icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
-            }
-        }
-    } catch {
-        icon = `http://www.google.com/s2/favicons?domain=${url}&sz=128`
-    }
-    
-    // icon = 'https://cors-anywhere.herokuapp.com/google.com/favicon.ico'
-    
-    grid.append(createApp(icon, title, uri))
-    localStore.push("apps", { icon, title, url: uri})
-}) */
-
 function loadImage(src) {
     return new Promise((resolve, reject) => {
         const img = new Image(1, 1)
@@ -196,21 +160,25 @@ function createApp(appInfo, mode = 'top') {
         
         document.getElementById("app-sc").innerHTML = ''
         
-        if (appInfo.actions) {
-            for(let key in appInfo.actions) {
-                const li = document.createElement('li')
-                const icon = document.createElement('span')
-                const title = document.createElement('span')
-                
-                icon.innerText = key
-                icon.classList.add("material-symbols-rounded")
-                
-                title.innerText = appInfo.actions[key]
-                
-                li.append(icon, title)
-                document.getElementById("app-sc").append(li)
-            }
-        }
+        console.log(appInfo)
+        
+        appInfo.actions?.forEach(action => {
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            const icon = document.createElement('span')
+            const title = document.createElement('span')
+            
+            a.href = action.url
+            
+            icon.innerText = actions.icon
+            icon.classList.add("material-symbols-rounded")
+            
+            title.innerText = actions.title
+            
+            a.append(icon, title)
+            li.append(a)
+            document.getElementById("app-sc").append(li)
+        })
         
         document.getElementById('app-remove').onclick = () => {
             // console.log(app.parentElement, dock, app.parentElement == dock)
@@ -259,7 +227,7 @@ function createApp(appInfo, mode = 'top') {
         document.getElementById('grid').classList.remove('drag')
         
         fakeApp.remove()
-            
+        
         if (y >= box.top) {
             app.classList.remove('drag')
             
@@ -279,9 +247,11 @@ function createApp(appInfo, mode = 'top') {
 
 function loadImageCross(iconSrc) {
     return new Promise((resolve, reject) => {
-        const options = { headers: {
-            'x-cors-api-key': 'temp_feb2edc04842027197f40b2bf0452b5d'
-        } };
+        const options = {
+            headers: {
+                'x-cors-api-key': 'temp_feb2edc04842027197f40b2bf0452b5d'
+            }
+        };
         
         fetch('https://proxy.cors.sh/' + iconSrc, options)
             .then(response => response.blob())
@@ -297,7 +267,7 @@ function loadImageCross(iconSrc) {
                 a.onerror = (e) => reject("Failed to Read: " + iconSrc + e)
                 a.readAsDataURL(response);
             })
-            // .catch(() => reject("Failed to Fetch: " + iconSrc));
+        // .catch(() => reject("Failed to Fetch: " + iconSrc));
     })
 }
 
@@ -308,15 +278,15 @@ async function isTransparent(imgSrc) {
     // const can = document.createElement('canvas')
     const can = new OffscreenCanvas(10, 10);
     const ctx = can.getContext('2d')
-        
+    
     // grid.append(img)
     
     ctx.drawImage(img, 0, 0, 10, 10)
     // grid.append(can)
     const imgd = ctx.getImageData(0, 0, 10, 10)
     let count = 0
-            
-    for(let i = 0; i < imgd.data.length; i += 4) {
+    
+    for (let i = 0; i < imgd.data.length; i += 4) {
         if (imgd.data[i + 3] < 255) count++
     }
     
