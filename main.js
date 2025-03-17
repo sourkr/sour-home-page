@@ -1,4 +1,5 @@
 import LocalStorage from "./localstorage.js"
+import { vec2, normalize, sub, distance, mul, add } from './vec.js';
 
 const localStore = new LocalStorage('sour-home')
 
@@ -50,8 +51,6 @@ function startPress(ev) {
         closePopup()
         ev.stopPropagation()
     }
-    
-    // timer = setTimeout(() => onlongclick(ev), 700)
 }
 
 function closePopup() {
@@ -191,30 +190,44 @@ function createApp(appInfo, mode = 'top') {
         }
     });
     
-    let x, y
+    let animator
     
     app.addEventListener('touchmove', ev => {
         ev.preventDefault()
         
         closePopup();
         
-        app.classList.add('drag')
-        document.getElementById('grid').classList.add('drag')
+        const x = ev.touches[0].pageX
+        const y = ev.touches[0].pageY
+        const touchPos = vec2(x, y)
         
-        x = ev.touches[0].pageX
-        y = ev.touches[0].pageY
+        if (!app.classList.contains('drag')) {
+            const rect = app.getBoundingClientRect()
+            app.style.left = rect.left - rect.width/2 + 'px'
+            app.style.top = rect.top - rect.height/2 + 'px'
+            
+            animator = new Animator(app)
+            animator.target = touchPos
+            animator.start()
         
-        app.style.left = x + 'px'
-        app.style.top = y + 'px'
+            app.classList.add('drag')
+            
+            document.getElementById('grid').classList.add('drag')
+        }
+        
+        animator.target = touchPos
+        
+        if (animator.isFinished) {
+            app.style.left = x + 'px'
+            app.style.top = y + 'px'
+        }
         
         const box = document.getElementById('dock').getBoundingClientRect()
         
         if (y >= box.top) {
             document.getElementById('dock').prepend(fakeApp)
-            // document.getElementById('dock').classList.add('drag')
         } else {
             fakeApp.remove()
-            // document.getElementById('dock').classList.remove('drag')
         }
     })
     
@@ -226,7 +239,7 @@ function createApp(appInfo, mode = 'top') {
         
         fakeApp.remove()
         
-        if (y >= box.top) {
+        if (animator.target.y >= box.top) {
             app.classList.remove('drag')
             
             app.remove()
@@ -303,6 +316,42 @@ function clearName(name) {
     }
     
     return name.trim()
+}
+
+class Animator {
+    
+    /** @type { { x: number, y: number } } */
+    target
+    
+    #running = false
+    #ele
+    
+    constructor(ele) {
+        this.#ele = ele
+    }
+    
+    start() {
+        this.#loop()
+    }
+    
+    #loop() {
+        const rect = this.#ele.getBoundingClientRect()
+        const elePos = vec2(rect.left + rect.width/2, rect.top + rect.height/2)
+        
+        if (distance(elePos, this.target) <= 1.5) {
+            // this.onfinish?.()
+            this.isFinished = true
+            return
+        }
+        
+        const dir = normalize(sub(this.target, elePos))
+        const newPos = add(mul(dir, vec2(5, 5)), elePos)
+        
+        this.#ele.style.left = newPos.x + 'px'
+        this.#ele.style.top = newPos.y + 'px'
+        
+        requestAnimationFrame(this.#loop.bind(this))
+    }
 }
 
 main()

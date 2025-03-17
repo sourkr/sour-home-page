@@ -199,6 +199,9 @@ body {
         justify-content: center;
         /* clip-path: url(#squircle); */
         flex: 1;
+        transition-delay: 0s;
+        transition-timing-function: linear;
+        /* transition: 1s translate; */
         
         img {
             margin: 0;
