@@ -1,6 +1,6 @@
-import LocalStorage from '../localstorage.js';
+import { LocalStore } from '../asset.js';
 
-const localStore = new LocalStorage('sour-home')
+const localStore = new LocalStore('sour-home')
 const namesCom = await (await fetch('./namesCom.txt')).text()
 const list = document.getElementById('apps')
 const actionsList = await (await fetch('./actions.json')).json()

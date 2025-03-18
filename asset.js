@@ -1,4 +1,14 @@
-export default class LocalStorage {
+export function loadImage(src, w, h = w) {
+    return new Promise((resolve, reject) => {
+        const img = new Image(w, h)
+        
+        img.onload = () => resolve(img)
+        img.onerror = () => reject(new Error('Failed to load image: ' + img.src))
+        img.src = src
+    })
+}
+
+export class LocalStore {
     constructor(appName) {
         this.data = JSON.parse(localStorage.getItem(appName))
         this.appName = appName

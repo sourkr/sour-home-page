@@ -11,6 +11,10 @@ body {
     user-select: none;
     color: black;
     overflow: hidden;
+    
+    &:has(.drag) {
+        backdrop-filter: blur(10px);
+    }
 }
 
 .edit {
@@ -86,8 +90,8 @@ body {
     grid-template-rows: repeat(6, 1fr);
     grid-template-columns: repeat(4, 1fr);
     flex: 1;
-    transition: .2s;
-    
+    transition: .2s scale;
+
     &.drag {
         --dock-height: 90px;
         
@@ -175,7 +179,7 @@ body {
         flex: 1;
     }
     
-    div {
+    #apps-wrapper {
         display: flex;
         flex: 1;
         justify-content: center;
@@ -279,26 +283,19 @@ body {
 }
 
 #fake-app {
-    position: relative;
     height: 100%;
-    flex: 1;
-    overflow: visible;
+    flex: 0;
+    display: flex;
+    align-items: center;
+    transition: .2s;
+    justify-content: center;
     
     svg {
-      width: 60px;
-      height: 60px;
-    }
-    
-    /* &:after {
-        content: '';
-        position: absolute;
         width: 60px;
         height: 60px;
-        left: 50%;
-        translate: -50% 0;
-        border: 2px solid white;
-        border-radius: 20px;
-    } */
+        scale: 0;
+        transition: .2s;
+    }
 }
 
 .hide {

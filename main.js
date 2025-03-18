@@ -1,7 +1,7 @@
-import LocalStorage from "./localstorage.js"
+import { LocalStore } from "./asset.js"
 import { vec2, normalize, sub, distance, mul, add } from './vec.js';
 
-const localStore = new LocalStorage('sour-home')
+const localStore = new LocalStore('sour-home')
 
 const grid = document.getElementById('grid')
 const dock = document.getElementById('dock')
@@ -106,12 +106,6 @@ document.body.addEventListener('click', ev => {
         document.body.classList.remove('edit')
     }
 })
-
-// function createFakeDockItem() {
-//     const item = document.createElement('div')
-//     item.classList.add('fake-dock-item')
-//     return item;
-// }
 
 function createApp(appInfo, mode = 'top') {
     const app = document.createElement('a')
@@ -225,31 +219,45 @@ function createApp(appInfo, mode = 'top') {
         const box = document.getElementById('dock').getBoundingClientRect()
         
         if (y >= box.top) {
-            document.getElementById('dock').prepend(fakeApp)
+            if (!dock.contains(fakeApp)) {
+                dock.prepend(fakeApp)
+                setTimeout(() => {
+                    fakeApp.style.flex = 1
+                    fakeApp.querySelector('svg').style.scale = 1
+                })
+            }
         } else {
             fakeApp.remove()
+            fakeApp.style.flex = 0
         }
     })
     
     app.addEventListener('touchend', ev => {
         const box = document.getElementById('dock').getBoundingClientRect()
         
-        app.classList.remove('drag')
         document.getElementById('grid').classList.remove('drag')
         
-        fakeApp.remove()
-        
         if (animator.target.y >= box.top) {
+            const rect = fakeApp.querySelector('svg').getBoundingClientRect()
+            const animator = new Animator(app)
+            animator.target = vec2(rect.left + rect.width/2, rect.top + rect.height/2)
+            animator.start()
+            
+            animator.onfinish = () => {
+                fakeApp.remove()
+                app.classList.remove('drag')
+
+                app.remove()
+                document.getElementById('dock').prepend(app)
+                
+                app.style.left = 0
+                app.style.top = 0
+                
+                localStore.filter('apps', app => app.url != appInfo.url)
+                localStore.push('dock', appInfo)
+            }
+        } else {
             app.classList.remove('drag')
-            
-            app.remove()
-            document.getElementById('dock').prepend(app)
-            
-            app.style.left = 0
-            app.style.top = 0
-            
-            localStore.filter('apps', app => app.url != appInfo.url)
-            localStore.push('dock', appInfo)
         }
     })
     
@@ -323,6 +331,9 @@ class Animator {
     /** @type { { x: number, y: number } } */
     target
     
+    /** @type { () => void } */
+    onfinish
+    
     #running = false
     #ele
     
@@ -338,9 +349,9 @@ class Animator {
         const rect = this.#ele.getBoundingClientRect()
         const elePos = vec2(rect.left + rect.width/2, rect.top + rect.height/2)
         
-        if (distance(elePos, this.target) <= 1.5) {
-            // this.onfinish?.()
+        if (distance(elePos, this.target) <= 1.8) {
             this.isFinished = true
+            this.onfinish?.()
             return
         }
         
