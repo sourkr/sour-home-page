@@ -1,4 +1,4 @@
-import { LocalStore } from "./asset.js"
+import { LocalStore, loadImage } from "./asset.js"
 import { vec2, normalize, sub, distance, mul, add } from './vec.js';
 
 const localStore = new LocalStore('sour-home')
@@ -22,29 +22,19 @@ function main() {
     })
 }
 
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image(1, 1)
-        img.src = src
-        
-        img.onload = () => resolve(img)
-        img.onerror = () => reject()
-    })
-}
-
-async function fetchWebsiteInfo(domain) {
-    const url = `https://opengraph.io/api/1.1/site/${encodeURIComponent(domain)}?app_id=0c253682-e5d9-4402-b0e4-22933b6a92fe`;
+// async function fetchWebsiteInfo(domain) {
+//     const url = `https://opengraph.io/api/1.1/site/${encodeURIComponent(domain)}?app_id=0c253682-e5d9-4402-b0e4-22933b6a92fe`;
     
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data)
-        return data;
-    } catch (error) {
-        console.error(error);
-        return 'Untitled'
-    }
-}
+//     try {
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         console.log(data)
+//         return data;
+//     } catch (error) {
+//         console.error(error);
+//         return 'Untitled'
+//     }
+// }
 
 function startPress(ev) {
     if (appInfoPopup && !document.getElementById('app-info').contains(ev.target)) {
@@ -226,9 +216,12 @@ function createApp(appInfo, mode = 'top') {
                     fakeApp.querySelector('svg').style.scale = 1
                 })
             }
-        } else {
-            fakeApp.remove()
+        } else if (dock.contains(fakeApp)) {
             fakeApp.style.flex = 0
+            fakeApp.querySelector('svg').style.scale = 0
+            
+            setTimeout(() => fakeApp.remove(), 200)
+            
         }
     })
     
